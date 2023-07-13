@@ -1,0 +1,28 @@
+# 将静态资源解析并加载为一个 ES 模块的问题
+# 考虑静态资源的部署问题、体积问题、网络性能问题，并采取相应的方案来进行优化。
+## 图片加载
+加载方式：img标签-cssBackground-JavaScript脚本方式
+ SVG 组件方式加载:
+ Vue2 项目中可以使用 vite-plugin-vue2-svg插件。
+Vue3 项目中可以引入 vite-svg-loader。
+React 项目使用 vite-plugin-svgr插件。
+JSON 加载:
+底层使用@rollup/pluginutils 的 dataToEsm 方法将 JSON 对象转换为一个包含各种具名导出的 ES 模块
+Web Worker 脚本:Web Worker 的作用，就是为 JavaScript 创造多线程环境，允许主线程创建 Worker 线程，将一些任务分配给后者运行。在主线程运行的同时，Worker 线程在后台运行，两者互不干扰。
+Web Assembly 文件:
+其它静态资源:如果你的项目中还存在其它格式的静态资源，你可以通过assetsInclude配置让 Vite 来支持加载:
+特殊资源后缀:
+?url: 表示获取资源的路径，这在只想获取文件路径而不是内容的场景将会很有用。
+?raw: 表示获取资源的字符串内容，如果你只想拿到资源的原始内容，可以使用这个后缀。
+?inline: 表示资源强制内联，而不是打包成单独的文件。
+生产环境处理:
+1.自定义部署域名:
+自动化地址替换：base: isProduction ? CDN_URL: '/'
+某些图片需要存放到另外的存储服务：定义环境变量的方式
+2.单文件 or 内联？
+vite中如果静态资源体积 >= 4KB，则提取成单独的文件
+如果静态资源体积 < 4KB，则作为 base64 格式的字符串内联
+--build.assetsInlineLimit自行配置
+3.图片压缩：
+图片压缩库imagemin--无损压缩--有损压缩
+4.雪碧图优化: Vite 中提供了import.meta.glob的语法糖来解决这种批量导入的问题

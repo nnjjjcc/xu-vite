@@ -1,0 +1,36 @@
+原生CSS：
+1原生 CSS 不支持选择器的嵌套，
+2如果出现同样的类名，很容易造成不同的样式互相覆盖和污染，
+3浏览器兼容问题，
+4打包后的代码体积问题.
+解决方案：
+CSS 预处理器： scss,less,stylus.嵌套规则，定义变量，条件判断和循环语句。
+CSS Modules ：CSS 类名处理成哈希值。
+CSS 后处理器PostCSS：
+CSS in JS 方案
+CSS 原子化框架
+--------
+vite:本身对 CSS 各种预处理器语言(Sass/Scss、Less和Stylus)做了内置支持
+normalizePath函数可以处理包括相对路径和绝对路径在内的各种路径，并返回标准化后的路径。
+path.resolve:
+1.用于将相对路径解析为绝对路径。它将路径或路径片段解析为绝对路径
+2.接受一个或多个路径片段作为参数，并将它们解析为一个绝对路径
+如果路径片段以斜杠 (/) 开头，那么它被认为是从根目录开始的绝对路径。
+如果路径片段以 ./ 或 ../ 开头，它被认为是相对路径，并从当前工作目录开始解析。
+如果路径片段不以斜杠、 ./ 或 ../ 开头，它被认为是相对于当前工作目录的文件或目录。
+Vite 会对后缀带有.module的样式文件自动应用 CSS Modules
+PostCSS 插件:自动为不同的目标浏览器添加样式前缀，解决的是浏览器兼容性的问题。
+postcss-pxtorem： 用来将 px 转换为 rem 单位，在适配移动端的场景下很常用。
+postcss-preset-env: 通过它，你可以编写最新的 CSS 语法，不用担心兼容性问题。
+cssnano: 主要用来压缩 CSS 代码，跟常规的代码压缩工具不一样，它能做得更加智能，比如提取一些公共样式进行复用、缩短一些常见的属性值等等。
+CSS In JS 方案: styled-components和emotion
+{
+CSS-in-JS 的运行时问题。当你的组件进行渲染的时候，CSS-in-JS 库会在运行时将你的样式代码 ”序列化” 为可以插入文档的 CSS 。这无疑会消耗浏览器更多的 CPU 性能
+CSS-in-JS 让你的包体积更大了。 这是一个明显的问题。每个访问你的站点的用户都不得不加载关于 CSS-in-JS 的 JavaScript。Emotion 的包体积压缩之后是 7.9k ，而 styled-components 则是 12.7 kB 。虽然这些包都不算是特别大，但是如果再加上 react & react-dom 的话，那也是不小的开销。
+CSS-in-JS 让 React DevTools 变得难看。 每一个使用 css prop 的 react 元素， Emotion 都会渲染成 <EmotionCssPropInternal> 和 <Insertion> 组件。如果你使用很多的 css prop，那么你会在 React DevTools 看到下面这样的场景
+}
+选择器命名问题、DCE(Dead Code Elimination 即无用代码删除)、代码压缩、生成 SourceMap、服务端渲染(SSR)等问题，而styled-components和emotion已经提供了对应的 babel 插件来解决这些问题，我们在 Vite 中要做的就是集成这些 babel 插件。
+原子化 CSS 能力:常用的两个能力: attributify 和 shortcuts。
+{
+    attributify，翻译过来就是属性化，也就是说我们可以用 props 的方式去定义样式属性
+}
