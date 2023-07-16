@@ -1,0 +1,16 @@
+Esbuild 性能极高:
+Vite在-依赖预编译、TS 语法转译、代码压缩-方面使用Esbuild
+使用 Golang 开发-多核并行-从零造轮子-高效的内存利用
+插件开发是 Esbuild 中非常重要的内容
+#API：build、buildSync和serve
+build--异步 API
+buildSync--同步 API   Esbuild 在当前线程阻塞，丧失并发任务处理的优势,导致Esbuild 所有插件中都不能使用任何异步操作
+serve：
+单文件转译：Transform API
+#插件开发
+钩子函数：
+onResolve 钩子 和 onLoad钩子
+实战 1: CDN 依赖拉取插件
+介绍：在vite运行build时，默认会把所有的库文件合并到一个大文件中，产生一个打包后的js文件，其中会包含各种库文件，会导致最后打包完成后的文件过大，同时减慢打包速度，这时可以把库文件代码使用cdn访问，加快打包和网页打开速度。
+Esbuild 插件来识别这样的 url 路径，然后从网络获取模块内容并让 Esbuild 进行加载，甚至不再需要npm install安装依赖了
+Esbuild 插件结构被设计为一个对象，里面有name和setup两个属性，name是插件的名称，setup是一个函数，其中入参是一个 build 对象，这个对象上挂载了一些钩子可供我们自定义一些钩子函数逻辑。
