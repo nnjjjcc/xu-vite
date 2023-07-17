@@ -1,10 +1,10 @@
 const { build } = require("esbuild");
-const httpImport = require("./http-import-plugin");
 
+const console = require("./delete-console");
 async function runBuild() {
   build({
     absWorkingDir: process.cwd(),
-    entryPoints: ["./src/index.jsx"],
+    entryPoints: ["./src/index.js"],
     entryNames: "[dir]/[name]-[hash]",
     outdir: "dist",
     bundle: true,
@@ -14,10 +14,8 @@ async function runBuild() {
     metafile: true,
     chunkNames: "[name]-[hash]",
     assetNames: "assets/[name]-[hash]",
-    plugins: httpImport(),
-  }).then(() => {
-    console.log("🚀 Build Finished!");
-  });
+    plugins: [console()],
+  }).then(() => {});
 }
 
 runBuild();

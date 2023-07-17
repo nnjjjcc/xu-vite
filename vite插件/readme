@@ -1,0 +1,31 @@
+#插件 Hook:
+通用 Hook:
+服务器启动阶段: options和buildStart钩子会在服务启动时被调用。
+请求响应阶段: 当浏览器发起请求时，Vite 内部依次调用resolveId、load和transform钩子。
+服务器关闭阶段: Vite 会依次执行buildEnd和closeBundle钩子。
+#独有 Hook:
+1.config: 用来进一步修改配置。
+2.configResolved: 用来记录最终的配置信息。
+3.configureServer: 用来获取 Vite Dev Server 实例，添加中间件。
+4.transformIndexHtml: 用来转换 HTML 的内容。
+5.handleHotUpdate: 用来进行热更新模块的过滤，或者进行自定义的热更新处理。
+
+#阶段
+服务启动阶段: config、configResolved、options、configureServer、buildStart
+请求响应阶段: 如果是 html 文件，仅执行transformIndexHtml钩子；对于非 HTML 文件，则依次执行resolveId、load和transform钩子。相信大家学过 Rollup 的插件机制，已经对这三个钩子比较熟悉了。
+热更新阶段: 执行handleHotUpdate钩子。
+服务关闭阶段: 依次执行buildEnd和closeBundle钩子。
+
+#利用
+默认情况下 Vite 插件同时被用于开发环境和生产环境，你可以通过apply属性来决定应用场景:
+# Vite 会依次执行如下的插件:
+Alias (路径别名)相关的插件。
+⭐️ 带有 enforce: 'pre' 的用户插件。
+Vite 核心插件。
+⭐️ 没有 enforce 值的用户插件，也叫普通插件。
+Vite 生产环境构建用的插件。
+⭐️ 带有 enforce: 'post' 的用户插件。
+Vite 后置构建插件(如压缩插件)。
+
+实战:vite打包进度
+1.第一次打包的时候，我们 记录下对应的模块数量，然后 缓存起来：进度条百分比 = 当前转换的模块 / 模拟的模块总数
