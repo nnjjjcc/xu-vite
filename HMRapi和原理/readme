@@ -1,0 +1,29 @@
+# 模块局部更新+状态保存的需求在live reload的方案没有得到满足
+# 模块级别的局部更新
+# Vite 自己所实现的 HMR API，Vite 的 HMR API 基于 ESM 模块规范来实现，毫秒级别
+ HMR： 模块热替换或者模块热更新
+ HMR 的技术我们就可以实现局部刷新和状态保存
+ HMR 系统基于原生的 ESM 模块规范来实现
+import.meta对象为现代浏览器原生的一个内置对象
+ #模块更新时逻辑: hot.accept
+ 接受模块更新：
+ 1.接受自身模块的更新：当模块接受自身的更新时，则当前模块会被认为 HMR 的边界
+ 2.接受某个子模块的更新:
+ `
+ +if (import.meta.hot) {
++  import.meta.hot.accept('./render.ts', (newModule) => {
++    newModule.render();
++  })
+`
+ 3.接受多个子模块的更新:
+ if (import.meta.hot) {
++  import.meta.hot.accept(['./render.ts', './state.ts'], (modules) => {
++    console.log(modules);
++  })
++}
+4.共享数据: hot.data 属性 :
+import.meta.hot.data 对象上挂载了一个count 属性
+
+属性用来在不同的模块实例间共享一些数据
+ 条件守卫语句
+import.meta.hot对象只有在开发阶段才会被注入到全局，生产环境是访问不到的

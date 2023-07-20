@@ -1,0 +1,17 @@
+# Vite 的默认分包策略，以及底层所使用的 Rollup 拆包 API——manualChunks。
+
+bundle 指的是整体的打包产物，包含 JS 和各种静态资源。
+chunk 指的是打包后的 JS 文件，是 bundle 的子集。
+vendor 是指第三方包的打包产物，是一种特殊的 chunk。
+
+# Code Splitting 解决的问题:
+
+单 chunk 打包模式 1.无法做到按需加载，即使是当前页面不需要的代码也会进行加载。 2.线上缓存复用率极低，改动一行代码即可导致整个 bundle 产物缓存失效。
+前端页面中的 JS 代码:
+Initital Chunk(页面首屏所需要的 JS 代码)和 Async Chunk
+通过 Code Splitting 我们可以将按需加载的代码拆分出单独的 chunk，这样应用在首屏加载时只需要加载 Initial Chunk 即可，避免了冗余的加载过程，使页面性能得到提升。
+缓存命中率是一个重要的性能衡量标准
+
+# Vite 默认拆包策略
+
+1.拆包也是基于 Rollup 来完成， Vite 基于 Rollup 的 manualChunksAPI 实现了应用拆包的策略:
