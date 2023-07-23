@@ -1,0 +1,15 @@
+同时也介绍了基于 HMR Boundary (HMR 边界)的更新模式
+热更新：自动对页面上的模块进行更改
+服务端究竟是定位到 HMR 边界模块，以及客户端是如何接受更新并加载最新模块内容的呢
+import.meta.hot.accept:监听自身模块或者其他模块的变更
+import.meta.hot.dispose:清除自身或者其他模块因为更新HMR产生的副作用
+import.meta.hot.invalidate:用于让HMR失效，实现浏览器本地刷新。
+# 热更新的原理:
+1.模块依赖图实现:
+Vite 在 Dev Server 中创建了模块依赖图的数据结构,
+初始化依赖图实例,创建依赖图节点,绑定各个模块节点的依赖关系
+ModuleGraph这个类的实现。其中定义了若干个 Map.
+ModuleNode 中存放模块信息，重要的是 importers 和importedModules，这两条信息分别代表了当前模块被哪些模块引用以及它依赖了哪些模块
+2.服务端收集更新模块：
+
+3.客户端派发更新
